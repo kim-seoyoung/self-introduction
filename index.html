@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>김서영 · AI Engineer</title>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root {
+    --accent: #F37321;
+    --accent-soft: #FFF2E8;
+    --accent-border: #FBD0B0;
+    --ink: #0F172A;
+    --sub: #475569;
+    --line: #E5E7EB;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    color: var(--ink);
+    letter-spacing: -0.012em;
+    background: #fff;
+  }
+  .accent { color: var(--accent); }
+  .accent-bg { background: var(--accent); }
+  .accent-border { border-color: var(--accent); }
+  .accent-soft { background: var(--accent-soft); }
+  .text-sub { color: var(--sub); }
+  .eyebrow {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+  .fade-in {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.9s ease, transform 0.9s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .card-expand {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.6s ease;
+  }
+  .card-expand.open { max-height: 1400px; }
+
+  /* 자동차 탑뷰 애니메이션 */
+  .topview-distance { stroke-dasharray: 4 4; animation: dash 3s linear infinite; }
+  @keyframes dash { to { stroke-dashoffset: -16; } }
+  .blink { animation: blink 2.4s ease-in-out infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.5} }
+
+  /* MUM-T 노드 */
+  .node-pulse { animation: pulse 2.4s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.55} }
+
+  /* dagster running */
+  .train-running { animation: trainGlow 1.6s ease-in-out infinite; }
+  @keyframes trainGlow {
+    0%,100% { box-shadow: 0 0 0 0 rgba(243,115,33,0.0); }
+    50% { box-shadow: 0 0 0 6px rgba(243,115,33,0.20); }
+  }
+
+  /* nav */
+  .nav-link { transition: color 0.2s; }
+  .nav-link:hover { color: var(--accent); }
+
+  /* card hover */
+  .career-card { transition: border-color 0.2s, transform 0.2s; }
+  .career-card:hover { border-color: var(--accent); }
+
+  /* expand chevron */
+  .chevron { transition: transform 0.4s ease; }
+  .open-card .chevron { transform: rotate(180deg); }
+
+  /* modal overlay */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 100;
+    background: rgba(15,23,42,0.55);
+    backdrop-filter: blur(6px);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  .modal-overlay.active { opacity: 1; pointer-events: auto; }
+  .modal-box {
+    background: #fff; border-radius: 16px;
+    max-width: 860px; width: 92%; max-height: 88vh;
+    overflow-y: auto; padding: 40px;
+    transform: translateY(20px) scale(0.97);
+    transition: transform 0.3s ease;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.18);
+  }
+  .modal-overlay.active .modal-box {
+    transform: translateY(0) scale(1);
+  }
+  .modal-box::-webkit-scrollbar { width: 4px; }
+  .modal-box::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
+  .modal-gallery { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
+  .modal-gallery img {
+    height: 260px; width: auto; border-radius: 8px;
+    border: 1px solid #E5E7EB; flex-shrink: 0;
+  }
+  .side-card { cursor: pointer; }
+
+</style>
+</head>
+<body>
+
+<!-- Top nav -->
+<nav class="sticky top-0 z-40 bg-white/85 backdrop-blur border-b border-gray-100">
+  <div class="max-w-5xl mx-auto px-8 h-14 flex items-center justify-between text-sm">
+    <a href="#top" class="font-semibold">김서영</a>
+    <div class="flex gap-8 text-gray-500">
+      <a href="#career" class="nav-link">Career</a>
+      <a href="#agent" class="nav-link">Agent Experience</a>
+      <a href="#interests" class="nav-link">Interests</a>
+      <a href="#sideproject" class="nav-link">Side Project</a>
+      <a href="#closing" class="nav-link">Closing</a>
+    </div>
+  </div>
+</nav>
+
+<main id="top" class="max-w-3xl mx-auto px-8">
+
+  <!-- HERO -->
+  <header class="pt-32 pb-32 fade-in">
+    <p class="eyebrow mb-6">Self Introduction</p>
+    <h1 class="text-5xl font-bold leading-[1.15] mb-8">
+      하나를 파고들면서,<br />
+      낯선 문제에도 부딪히는 <span class="accent">엔지니어</span>
+    </h1>
+    <p class="text-lg text-sub leading-relaxed">
+      이미지에서 공간을 읽는 AI를 만들어왔고,<br />
+      더 다양한 문제를 해결하며 함께 성장해가고 싶습니다.
+    </p>
+  </header>
+
+  <!-- 01. CAREER -->
+  <section id="career" class="py-20 fade-in">
+    <p class="eyebrow mb-3">01 · Career</p>
+    <h2 class="text-3xl font-bold mb-4">경력 소개</h2>
+    <p class="text-sub mb-10 leading-relaxed">
+      두 회사를 거치며 이미지에서 3D 공간의 정보를 이해하는 일을 해왔습니다.<br />
+      2D 이미지는 3D에서 한 차원이 소실된 결과물이라 복원이 어렵고, 그러한 문제를 풀어오고 있습니다.
+    </p>
+
+    <div class="space-y-5">
+      <!-- Stradvision -->
+      <div class="career-card border border-gray-200 rounded-xl overflow-hidden">
+        <button class="w-full text-left p-7 flex items-start justify-between gap-6" onclick="toggleCard(this, 'strad')">
+          <div class="flex-1">
+            <p class="text-xs text-gray-400 mb-2 tracking-wider">2020.02 — 2023.05</p>
+            <h3 class="text-xl font-bold mb-2">Stradvision</h3>
+            <p class="text-sub text-sm leading-relaxed">자동차 fisheye 카메라에서 주변 차량의 물리적 정보 계산 및 탑뷰 생성.</p>
+          </div>
+          <span class="chevron text-gray-400 text-sm shrink-0 mt-1">▾</span>
+        </button>
+        <div id="strad" class="card-expand">
+          <div class="px-7 pb-7 border-t border-gray-100 pt-6 bg-gray-50">
+            <!-- 데모 영상 -->
+            <div class="bg-white rounded-lg border border-gray-200 p-5 mb-5">
+              <p class="text-xs text-gray-400 mb-3 tracking-wider">4 CAMERAS → TOP-VIEW</p>
+              <video class="w-full rounded-lg" onclick="this.paused ? this.play() : this.pause()" style="cursor:pointer">
+                <source src="asset/stradvision/My Movie.mp4" type="video/mp4" />
+              </video>
+            </div>
+            <ul class="space-y-2 text-sm text-sub leading-relaxed">
+              <li>· 후면 카메라 영상 → 차량 주변을 위에서 본 <strong class="text-ink">탑뷰</strong> 생성</li>
+              <li>· 검출 BBox로부터 <strong class="text-ink">거리 / 각도 / 속도</strong> 같은 물리량을 camera geometry 기반 계산</li>
+              <li>· 물리량의 noise 제거 및 안정화를 위해 signal processing기반 filtering 기법 활용</li>
+              <li>· LiDAR기반 3D Object Detection으로 Ground Truth 생성</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hanwha Systems -->
+      <div class="career-card border border-gray-200 rounded-xl overflow-hidden">
+        <button class="w-full text-left p-7 flex items-start justify-between gap-6" onclick="toggleCard(this, 'hwsys')">
+          <div class="flex-1">
+            <p class="text-xs text-gray-400 mb-2 tracking-wider">2023.06 — 현재</p>
+            <h3 class="text-xl font-bold mb-2">한화시스템</h3>
+            <p class="text-sub text-sm leading-relaxed">데이터 수집부터 모델 이식까지 과정을 통한 무기 SW 시스템 내 AI 개발.</p>
+          </div>
+          <span class="chevron text-gray-400 text-sm shrink-0 mt-1">▾</span>
+        </button>
+        <div id="hwsys" class="card-expand">
+          <div class="px-7 pb-7 border-t border-gray-100 pt-6 bg-gray-50">
+            <!-- MUM-T 줌인 SVG (무기체계 → 무기의 시스템) -->
+            <div class="bg-white rounded-lg border border-gray-200 p-5 mb-5">
+              <p class="text-xs text-gray-400 mb-4 tracking-wider">SYSTEM → SUB-SYSTEM</p>
+              <svg viewBox="0 0 760 240" class="w-full h-auto">
+                <defs>
+                  <marker id="arr1" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                    <path d="M0,0 L0,6 L9,3 z" fill="#94A3B8" />
+                  </marker>
+                </defs>
+
+                <!-- Stage 1: 무기 체계 (MUM-T / ALE 컨셉) -->
+                <g transform="translate(0, 0)">
+                  <rect x="10" y="20" width="345" height="200" rx="10" fill="white" stroke="#E5E7EB" />
+                  <text x="182" y="42" text-anchor="middle" font-size="10" fill="#94A3B8" letter-spacing="1.5">무기 체계 (MUM-T)</text>
+
+                  <g transform="translate(70, 75)">
+                    <ellipse cx="0" cy="0" rx="13" ry="4.5" fill="#334155" />
+                    <rect x="-1.5" y="-9" width="3" height="6" fill="#334155" />
+                    <line x1="-20" y1="-10" x2="20" y2="-10" stroke="#334155" stroke-width="1.4" />
+                    <rect x="10" y="-1" width="14" height="2" fill="#334155" />
+                    <line x1="22" y1="-3" x2="22" y2="3" stroke="#334155" stroke-width="1.2" />
+                  </g>
+                  <text x="70" y="105" text-anchor="middle" font-size="8" fill="#64748B">모선 헬기</text>
+
+                  <g transform="translate(190, 95)">
+                    <ellipse cx="0" cy="0" rx="8" ry="2.5" fill="#334155" />
+                    <line x1="-11" y1="-1" x2="11" y2="-1" stroke="#334155" stroke-width="1.1" />
+                    <line x1="-3" y1="1" x2="-3" y2="5" stroke="#334155" stroke-width="1" />
+                    <line x1="3" y1="1" x2="3" y2="5" stroke="#334155" stroke-width="1" />
+                  </g>
+                  <text x="190" y="115" text-anchor="middle" font-size="8" fill="#64748B">ALE 드론</text>
+
+                  <path d="M 88 78 Q 140 82 182 92" stroke="#F37321" stroke-width="1" stroke-dasharray="3 3" fill="none" />
+                  <text x="130" y="79" font-size="6.5" fill="#F37321" font-weight="600">data link</text>
+
+                  <g transform="translate(245, 158)">
+                    <rect x="0" y="14" width="34" height="11" rx="1.5" fill="#334155" />
+                    <rect x="7" y="7" width="22" height="7" rx="1.5" fill="#334155" />
+                    <line x1="27" y1="10" x2="40" y2="10" stroke="#334155" stroke-width="1.8" />
+                    <circle cx="6" cy="27" r="2" fill="#0F172A" />
+                    <circle cx="17" cy="27" r="2" fill="#0F172A" />
+                    <circle cx="28" cy="27" r="2" fill="#0F172A" />
+                  </g>
+                  <text x="263" y="205" text-anchor="middle" font-size="8" fill="#64748B">지상 전차</text>
+
+                  <path d="M 195 100 Q 220 130 257 158" stroke="#F37321" stroke-width="1" stroke-dasharray="3 3" fill="none" />
+
+                  <rect x="237" y="153" width="58" height="44" fill="none" stroke="#F37321" stroke-width="1.5" stroke-dasharray="4 4" rx="3" />
+                </g>
+
+                <path d="M 360 120 L 395 120" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#arr1)" />
+
+                <!-- Stage 2: 무기의 시스템 -->
+                <g transform="translate(400, 0)">
+                  <rect x="10" y="20" width="340" height="200" rx="10" fill="white" stroke="#E5E7EB" />
+                  <text x="180" y="42" text-anchor="middle" font-size="10" fill="#94A3B8" letter-spacing="1.5">무기의 시스템 (SW)</text>
+
+                  <rect x="30" y="65" width="300" height="26" rx="4" fill="#F1F5F9" stroke="#CBD5E1" />
+                  <text x="180" y="82" text-anchor="middle" font-size="10" fill="#334155">통신 · 제어</text>
+
+                  <rect x="30" y="100" width="300" height="26" rx="4" fill="#FFF2E8" stroke="#F37321" stroke-width="1.3" />
+                  <text x="180" y="117" text-anchor="middle" font-size="10" fill="#9A3412" font-weight="600">AI 기반 탐지 · 추적· 융합</text>
+
+                  <rect x="30" y="135" width="300" height="26" rx="4" fill="#F1F5F9" stroke="#CBD5E1" />
+                  <text x="180" y="152" text-anchor="middle" font-size="10" fill="#334155">화기 통제</text>
+
+                  <rect x="30" y="170" width="300" height="26" rx="4" fill="#F1F5F9" stroke="#CBD5E1" />
+                  <text x="180" y="187" text-anchor="middle" font-size="10" fill="#334155">디스플레이</text>
+                </g>
+              </svg>
+            </div>
+
+            <!-- MCMOT: 문제 → 결과 -->
+            <div class="bg-white rounded-lg border border-gray-200 p-5 mb-5">
+              <p class="text-xs text-gray-400 mb-4 tracking-wider">AI 기능 — MCMOT (Multi-Camera Multi-Object Tracking)</p>
+
+              <!-- 문제 -->
+              <p class="text-[11px] font-semibold text-gray-500 mb-2 tracking-wide">PROBLEM</p>
+              <p class="text-xs text-sub leading-relaxed mb-4">여러 플랫폼의 카메라에서 들어오는 영상 정보를 하나로 통합하여, 동일 객체를 식별·추적해야 하는 문제</p>
+              <div class="flex gap-3 mb-6 items-stretch" style="max-height:320px">
+                <div class="flex-[3] min-w-0 overflow-hidden rounded-lg border border-gray-200">
+                  <img src="asset/MCMOT1.gif" alt="다중 전차 시야 개요" class="w-full h-full object-cover" />
+                </div>
+                <div class="flex-[2] min-w-0 overflow-hidden rounded-lg border border-gray-200 bg-gray-50">
+                  <img src="asset/MCMOT2.png" alt="각 전차 카메라의 개별 시야" class="w-full h-full object-contain" />
+                </div>
+              </div>
+
+              <!-- 결과 -->
+              <p class="text-[11px] font-semibold accent mb-1 tracking-wide">RESULT</p>
+              <p class="text-xs text-sub leading-relaxed mb-3">AI모델을 통해 통합된 정보를 바탕으로 주변 환경을 파악하고, 전술적 의사결정에 활용</p>
+              <div class="overflow-hidden rounded-lg border border-gray-200">
+                <img src="asset/MCMOT3.png" alt="MCMOT — 다중 카메라 통합 추적 결과" class="w-full h-auto block" />
+              </div>
+            </div>
+            <ul class="space-y-2 text-sm text-sub leading-relaxed">
+              <li>· 무기 체계 안의 → 무기의 SW 시스템 안의 → <strong class="text-ink">AI 기능 개발 엄무 수행</strong></li>
+              <li>· 다중 카메라/객체 추적(Multi-Camera Multi-Object Tracking) 모델  개발</li>
+              <li>· Object Detection(한국인공지능학회 2024), Segmentation(ICRA 2025) 챌린지 개최</li>
+              <li>· 드론 소형 객체 탐지 챌린지(VisDrone) 참가</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02. AGENT -->
+  <section id="agent" class="py-20 fade-in">
+    <p class="eyebrow mb-3">02 · Agent Experience</p>
+    <h2 class="text-3xl font-bold mb-4">Agent를 도구 삼아, 일하는 방식을 바꾸는 중</h2>
+    <p class="text-sub mb-12 leading-relaxed">
+      직접 만들고 써보면서, 여러 일을 agent에게 맡기기 시작했습니다.<br />
+    </p>
+
+    <!-- 직접 만든 것: dagster + experiments loop 표 -->
+    <div class="mb-16">
+      <p class="text-xs text-gray-400 mb-2 tracking-wider">AI 개발 효율성</p>
+      <h3 class="text-xl font-bold mb-2">간단한 MLOps — dagster</h3>
+      <p class="text-sub text-sm leading-relaxed mb-5">
+        AI 개발의 experiments를 자동화, 효율화 하는 MLOps 툴을 제작하였습니다.<br />
+        필요한 기능과 실험에 맞춰 틀을 구성하고, 내부 데이터 및 모델을 쉽게 이식할 수 있도록 설계했습니다.
+      </p>
+
+      <div class="grid grid-cols-[2fr_1fr] gap-5 items-center">
+        <!-- 왼쪽: dagster screen capture (메인) -->
+        <div class="rounded-xl overflow-hidden border border-gray-200 shadow-sm">
+          <img src="asset/ChatGPT Image 2026년 5월 26일 오후 04_13_13.png" alt="dagster instance — local pipeline view" class="w-full h-auto block" />
+        </div>
+
+        <!-- 오른쪽: workflow 다이어그램 (vertical compact, 보조) -->
+        <div class="bg-gray-50 border border-gray-200 rounded-xl p-3">
+          <svg viewBox="0 0 260 500" class="w-full h-auto">
+            <defs>
+              <marker id="arr2v" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                <path d="M0,0 L0,6 L9,3 z" fill="#64748B" />
+              </marker>
+              <marker id="arr-orange-v" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                <path d="M0,0 L0,6 L9,3 z" fill="#F37321" />
+              </marker>
+            </defs>
+
+            <!-- 과제 -->
+            <g transform="translate(45, 14)">
+              <rect width="155" height="42" rx="7" fill="white" stroke="#0F172A" stroke-width="1.3" />
+              <text x="77.5" y="27" text-anchor="middle" font-size="12" fill="#0F172A" font-weight="600">과제가 주어진다</text>
+            </g>
+            <path d="M 122.5 56 L 122.5 80" stroke="#64748B" stroke-width="1.3" marker-end="url(#arr2v)" />
+
+            <!-- AI 문제 정의 -->
+            <g transform="translate(45, 84)">
+              <rect width="155" height="42" rx="7" fill="white" stroke="#0F172A" stroke-width="1.3" />
+              <text x="77.5" y="27" text-anchor="middle" font-size="12" fill="#0F172A" font-weight="600">AI 문제로 정의</text>
+            </g>
+            <path d="M 122.5 126 L 122.5 158" stroke="#64748B" stroke-width="1.3" marker-end="url(#arr2v)" />
+
+            <!-- EXPERIMENTS LOOP 박스 -->
+            <rect x="10" y="162" width="240" height="216" rx="10" fill="#FFF9F4" stroke="#F37321" stroke-width="1.2" stroke-dasharray="5 4" />
+            <text x="22" y="180" font-size="9" fill="#F37321" font-weight="600" letter-spacing="1.5">EXPERIMENTS LOOP</text>
+
+            <!-- 데이터 수집 -->
+            <g transform="translate(40, 190)">
+              <rect width="135" height="38" rx="6" fill="white" stroke="#F37321" stroke-width="1.3" />
+              <text x="67.5" y="24" text-anchor="middle" font-size="12" fill="#0F172A" font-weight="600">데이터 수집</text>
+            </g>
+            <path d="M 107.5 228 L 107.5 246" stroke="#64748B" stroke-width="1.3" marker-end="url(#arr2v)" />
+
+            <!-- 모델 실험 (accent) -->
+            <g transform="translate(40, 250)">
+              <rect width="135" height="38" rx="6" fill="#FFF2E8" stroke="#F37321" stroke-width="1.3" />
+              <text x="67.5" y="24" text-anchor="middle" font-size="12" fill="#0F172A" font-weight="600">모델 실험</text>
+            </g>
+            <path d="M 107.5 288 L 107.5 306" stroke="#64748B" stroke-width="1.3" marker-end="url(#arr2v)" />
+
+            <!-- 결과 비교 -->
+            <g transform="translate(40, 310)">
+              <rect width="135" height="38" rx="6" fill="white" stroke="#F37321" stroke-width="1.3" />
+              <text x="67.5" y="24" text-anchor="middle" font-size="12" fill="#0F172A" font-weight="600">결과 비교</text>
+            </g>
+
+            <!-- Loop back arrow: 비교 right → up → 데이터 right -->
+            <path d="M 175 329 L 215 329 L 215 209 L 175 209" stroke="#F37321" stroke-width="1.3" stroke-dasharray="5 4" fill="none" stroke-linejoin="round" marker-end="url(#arr-orange-v)" />
+
+            <!-- 비교 → 시스템 이식 (out of loop) -->
+            <path d="M 107.5 348 L 107.5 408" stroke="#64748B" stroke-width="1.3" marker-end="url(#arr2v)" />
+
+            <!-- 시스템 이식 -->
+            <g transform="translate(45, 412)">
+              <rect width="155" height="42" rx="7" fill="white" stroke="#0F172A" stroke-width="1.3" />
+              <text x="77.5" y="27" text-anchor="middle" font-size="12" fill="#0F172A" font-weight="600">시스템 이식</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI Agent Weekly -->
+    <div class="mb-16">
+      <p class="text-xs text-gray-400 mb-2 tracking-wider">동향 큐레이션</p>
+      <h3 class="text-xl font-bold mb-2">AI Agent Weekly</h3>
+      <p class="text-sub text-sm leading-relaxed mb-5">
+        매주 AI agent 관련 동향을 모아 정리해 보내주는 테크레터를 작성 및 배포하고 있습니다.<br />
+      </p>
+
+      <div class="grid grid-cols-2 gap-3 items-start">
+        <figure>
+          <img src="asset/techletter_messsage.png" alt="AI Agent Weekly — 주간 요약 메시지" class="w-full h-auto block rounded-lg border border-gray-200" />
+          <figcaption class="text-[11px] text-gray-500 mt-2">주간 요약 메시지</figcaption>
+        </figure>
+        <figure>
+          <img src="asset/techletter_letter.png" alt="AI Agent Weekly — letter 상세 페이지" class="w-full h-auto block rounded-lg border border-gray-200" />
+          <figcaption class="text-[11px] text-gray-500 mt-2">상세 letter 페이지</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <p class="text-sub leading-relaxed mt-10">
+      만들어 쓰는 경험이 쌓일수록, 다음에 위임할 수 있는 범위도 함께 넓어지고 있습니다.
+    </p>
+  </section>
+
+  <!-- 04. FRONTIER -->
+  <section id="interests" class="py-20 fade-in">
+    <p class="eyebrow mb-3">03 · Interests</p>
+    <h2 class="text-3xl font-bold mb-4">AI로 풀어가는 문제는 여전히 넓습니다</h2>
+    <p class="text-sub mb-10 leading-relaxed">
+      LLM agent가 가장 각광받고 있지만, <br />
+      AI의 영역은 더 넓고 데이터로 문제를 풀어가야 하는 자리는 계속 남아 있습니다. <br />
+    </p>
+
+    <blockquote class="border-l-4 accent-border pl-6 mb-8 italic text-sub">
+      "For me, the best use case of AI was to improve human health and accelerate scientific discovery..."
+      <footer class="text-xs mt-2">— Demis Hassabis, Google DeepMind CEO</footer>
+    </blockquote>
+
+    <!-- 그 외 관심 예시 -->
+    <div class="grid grid-cols-3 gap-3 mb-6">
+      <div class="border border-gray-200 rounded-lg px-4 py-3 hover:border-gray-300 transition">
+        <p class="text-[10px] text-gray-400 tracking-wider mb-1">ROBOTICS</p>
+        <p class="text-xs font-semibold">Physical AI</p>
+      </div>
+      <div class="border border-gray-200 rounded-lg px-4 py-3 hover:border-gray-300 transition">
+        <p class="text-[10px] text-gray-400 tracking-wider mb-1">BIOLOGY</p>
+        <p class="text-xs font-semibold">AlphaFold</p>
+      </div>
+      <div class="border border-gray-200 rounded-lg px-4 py-3 hover:border-gray-300 transition">
+        <p class="text-[10px] text-gray-400 tracking-wider mb-1">EARTH</p>
+        <p class="text-xs font-semibold">날씨 예측</p>
+      </div>
+    </div>
+
+    <!-- 주요 관심 분야 -->
+    <div class="grid grid-cols-2 gap-5 mb-8">
+      <div class="side-card border-2 accent-border rounded-xl p-7 hover:shadow-md transition" onclick="openModal('3dvision')">
+        <p class="eyebrow mb-2">Core Interest</p>
+        <h3 class="text-xl font-bold mb-3">3D Vision</h3>
+        <p class="text-sm text-sub leading-relaxed">
+          2D 이미지로부터 3D 공간을 이해하는 기술.<br />
+          두 회사를 거치며 계속 이 문제를 다뤄왔고, 가장 깊이 있게 파고 싶은 영역입니다.
+        </p>
+        <p class="text-xs accent mt-3 font-semibold">자세히 보기 →</p>
+      </div>
+      <div class="side-card border-2 accent-border rounded-xl p-7 hover:shadow-md transition" onclick="openModal('spatialvlm')">
+        <p class="eyebrow mb-2">Core Interest</p>
+        <h3 class="text-xl font-bold mb-3">Spatial VLM</h3>
+        <p class="text-sm text-sub leading-relaxed">
+          공간 정보를 이해하는 Vision-Language Model.<br />
+          3D Vision과 LLM이 만나는 접점에서 새로운 가능성을 탐색하고 있습니다.
+        </p>
+        <p class="text-xs accent mt-3 font-semibold">자세히 보기 →</p>
+      </div>
+    </div>
+
+    <p class="text-sub leading-relaxed">
+      관심 있는 분야의 모델을 개발하면서, agent를 탐구하고 활용해 더 나은 AI 기술을 만들어가고 싶습니다.
+    </p>
+  </section>
+
+  <!-- 05. SIDE PROJECT -->
+  <section id="sideproject" class="py-20 fade-in">
+    <p class="eyebrow mb-3">04 · Side Project</p>
+    <h2 class="text-3xl font-bold mb-4">회사 밖에서도 다양한 분야를 겪어보려 합니다</h2>
+    <p class="text-sub mb-10 leading-relaxed">한 영역에 머무르지 않고, AI를 적용할 수 있는 범위를 넓혀가려 합니다.</p>
+
+    <div class="grid grid-cols-3 gap-5">
+      <div class="side-card border border-gray-200 rounded-xl p-7 hover:border-orange-300 transition" onclick="openModal('techimpact')">
+        <p class="eyebrow mb-4">Social Impact</p>
+        <h3 class="text-lg font-bold mb-3">카카오 <br /> Tech for Impact</h3>
+        <p class="text-sm text-sub leading-relaxed">이동약자의 이동을 돕는 기술을 함께 고민하고 만들어보는 프로그램에 참여했습니다.</p>
+      </div>
+      <div class="side-card border border-gray-200 rounded-xl p-7 hover:border-orange-300 transition" onclick="openModal('mllm')">
+        <p class="eyebrow mb-4">Study</p>
+        <h3 class="text-lg font-bold mb-3">MLLM 스터디</h3>
+        <p class="text-sm text-sub leading-relaxed">멀티모달 LLM의 최신 연구를 함께 읽고, 본인 도메인에 어떻게 적용할 수 있을지 토의했습니다.</p>
+      </div>
+      <div class="side-card border border-gray-200 rounded-xl p-7 hover:border-orange-300 transition" onclick="openModal('druglab')">
+        <p class="eyebrow mb-4">AI for Science</p>
+        <h3 class="text-lg font-bold mb-3">AI for Safer Drug</h3>
+        <p class="text-sm text-sub leading-relaxed">NTD 관련 신약 개발에 AI 예측 모델을 적용하는 프로젝트에 참여했습니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06. CLOSING -->
+  <section id="closing" class="py-24 fade-in">
+    <p class="eyebrow mb-3">05 · Closing</p>
+    <h2 class="text-3xl font-bold mb-14">그래서 저는,</h2>
+
+    <div class="space-y-10">
+      <div class="border-l-2 accent-border pl-7">
+        <p class="eyebrow mb-3">나는 이렇게 일하고 싶다</p>
+        <p class="text-xl leading-relaxed text-ink">
+          관심 있는 문제를 AI 모델로 풀어가되, agent를 적극 활용해
+          <span class="accent font-semibold">개발의 깊이와 속도</span>를 함께 높이고 싶습니다.
+        </p>
+      </div>
+
+      <div class="border-l-2 accent-border pl-7">
+        <p class="eyebrow mb-3">이 자리의 의미</p>
+        <p class="text-xl leading-relaxed text-ink">
+          여기서 그 경험을 쌓으며, <span class="accent font-semibold">회사와 함께 성장하고 변화를 만들어가는 엔지니어</span>가 되고 싶습니다.
+        </p>
+      </div>
+    </div>
+
+    <p class="text-sub text-center mt-24 text-sm">감사합니다.</p>
+  </section>
+
+  <footer class="border-t border-gray-100 mt-12 py-10 text-center text-xs text-gray-400">
+    Kim Seoyoung · 2026
+  </footer>
+</main>
+
+<!-- Modals -->
+<div class="modal-overlay" id="modal-techimpact" onclick="closeModal(event, 'techimpact')">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="flex items-center justify-between mb-5">
+      <div>
+        <p class="eyebrow mb-1">Social Impact</p>
+        <h3 class="text-xl font-bold">카카오 Tech for Impact</h3>
+      </div>
+      <button onclick="closeModal(event, 'techimpact')" class="text-gray-400 hover:text-gray-600 text-2xl leading-none">&times;</button>
+    </div>
+    <div class="modal-gallery mb-5">
+      <img src="asset/테크포임팩트1.png" alt="Tech for Impact — 프로젝트 소개" />
+      <img src="asset/테크포임팩트2.jpg" alt="Tech for Impact — 팀 사진" />
+    </div>
+    <p class="text-sm text-sub leading-relaxed mb-3">
+      이동약자를 위한 실내 접근성 분석 AI 시스템을 개발하는 프로그램에 참여했습니다.
+    </p>
+    <ul class="text-sm text-sub leading-relaxed space-y-1">
+      <li>· 실내 사진을 기반으로 이동약자에게 불편한 요소를 AI로 분석</li>
+      <li>· 사회혁신가와 IT 전문가가 함께 팀을 구성해 진행</li>
+    </ul>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-mllm" onclick="closeModal(event, 'mllm')">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="flex items-center justify-between mb-5">
+      <div>
+        <p class="eyebrow mb-1">Study</p>
+        <h3 class="text-xl font-bold">MLLM 스터디</h3>
+      </div>
+      <button onclick="closeModal(event, 'mllm')" class="text-gray-400 hover:text-gray-600 text-2xl leading-none">&times;</button>
+    </div>
+    <div class="modal-gallery mb-5">
+      <img src="asset/MLLM1.png" alt="Dense Connector for MLLMs — NeurIPS 2024" />
+      <img src="asset/MLLM2.png" alt="Visual Shortcomings of Multimodal LLMs — CVPR 2024" />
+      <img src="asset/MLLM3.png" alt="Generative Image Dynamics — CVPR 2024 Best Paper" />
+    </div>
+    <p class="text-sm text-sub leading-relaxed mb-3">
+      모두의연구소에서 멀티모달 LLM 최신 논문을 읽고 발표·토의하는 스터디에 참여했습니다.
+    </p>
+    <ul class="text-sm text-sub leading-relaxed space-y-1">
+      <li>· NeurIPS 2024 — Dense Connector for MLLMs</li>
+      <li>· CVPR 2024 — Eyes Wide Shut? Visual Shortcomings of Multimodal LLMs</li>
+      <li>· CVPR 2024 Best Paper — Generative Image Dynamics</li>
+    </ul>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-druglab" onclick="closeModal(event, 'druglab')">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="flex items-center justify-between mb-5">
+      <div>
+        <p class="eyebrow mb-1">AI for Science</p>
+        <h3 class="text-xl font-bold">AI for Safer Drug LAB</h3>
+      </div>
+      <button onclick="closeModal(event, 'druglab')" class="text-gray-400 hover:text-gray-600 text-2xl leading-none">&times;</button>
+    </div>
+    <div class="modal-gallery mb-5">
+      <img src="asset/aifordrugsafer1.png" alt="AI for Safer Drug LAB — 프로젝트 개요" />
+      <img src="asset/aifordrugsafer2.png" alt="AI for Safer Drug LAB — 팀 미팅" />
+    </div>
+    <p class="text-sm text-sub leading-relaxed mb-3">
+      NTD(소외열대질환) 관련 신약 안전성 예측에 AI 모델을 적용하는 프로젝트에 참여했습니다.
+    </p>
+    <ul class="text-sm text-sub leading-relaxed space-y-1">
+      <li>· NTD 관련 데이터 수집 및 예측 모델 개발 진행</li>
+      <li>· 29개 기생충·독소 관련 protein target에 대한 예측 모델 개발</li>
+      <li>· 인공지능 기반 신약 개발 관련 배경 지식 정리</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+  // 모달 열기/닫기
+  function openModal(id) {
+    document.getElementById('modal-' + id).classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal(e, id) {
+    document.getElementById('modal-' + id).classList.remove('active');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.modal-overlay.active').forEach(function(m) {
+        m.classList.remove('active');
+      });
+      document.body.style.overflow = '';
+    }
+  });
+
+  // 스크롤 페이드 인
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.fade-in').forEach((el) => io.observe(el));
+
+  // 1번 카드 expand
+  function toggleCard(btn, id) {
+    const target = document.getElementById(id);
+    const card = btn.parentElement;
+    target.classList.toggle('open');
+    card.classList.toggle('open-card');
+  }
+
+
+</script>
+
+<!-- Modal: 3D Vision -->
+<div class="modal-overlay" id="modal-3dvision" onclick="closeModal(event, '3dvision')">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <p class="eyebrow mb-1">Core Interest</p>
+        <h3 class="text-xl font-bold">3D Vision</h3>
+      </div>
+      <button onclick="closeModal(event, '3dvision')" class="text-gray-400 hover:text-gray-600 text-2xl leading-none">&times;</button>
+    </div>
+
+    <!-- 개념 다이어그램 -->
+    <div class="bg-gray-50 border border-gray-200 rounded-xl p-5 mb-6">
+      <p class="text-[10px] text-gray-400 tracking-wider mb-3">CORE CONCEPT</p>
+      <svg viewBox="0 0 760 200" class="w-full h-auto">
+        <defs>
+          <marker id="m-arr" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L7,3 z" fill="#94A3B8" />
+          </marker>
+          <linearGradient id="dGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#1E293B" />
+            <stop offset="50%" stop-color="#64748B" />
+            <stop offset="100%" stop-color="#E2E8F0" />
+          </linearGradient>
+        </defs>
+
+        <!-- Step 1: 실제 3D 세계 -->
+        <rect x="5" y="20" width="150" height="110" rx="8" fill="#F8FAFC" stroke="#E5E7EB" />
+        <text x="80" y="40" text-anchor="middle" font-size="10" fill="#94A3B8" letter-spacing="1">REAL WORLD (3D)</text>
+        <!-- 간단한 건물/차 아이콘 -->
+        <rect x="25" y="55" width="30" height="50" rx="3" fill="#CBD5E1" />
+        <rect x="30" y="60" width="8" height="8" rx="1" fill="#94A3B8" />
+        <rect x="42" y="60" width="8" height="8" rx="1" fill="#94A3B8" />
+        <rect x="30" y="75" width="8" height="8" rx="1" fill="#94A3B8" />
+        <rect x="42" y="75" width="8" height="8" rx="1" fill="#94A3B8" />
+        <rect x="75" y="80" width="55" height="22" rx="4" fill="#64748B" />
+        <circle cx="85" cy="105" r="5" fill="#475569" />
+        <circle cx="120" cy="105" r="5" fill="#475569" />
+        <text x="80" y="140" text-anchor="middle" font-size="9" fill="#64748B">X, Y, <tspan font-weight="700" fill="#334155">Z(깊이)</tspan></text>
+
+        <!-- Arrow: 카메라 촬영 (소실) -->
+        <line x1="162" y1="75" x2="202" y2="75" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#m-arr)" />
+        <text x="182" y="66" text-anchor="middle" font-size="8" fill="#DC2626" font-weight="600">Z 소실</text>
+
+        <!-- Step 2: 2D 이미지 -->
+        <rect x="210" y="20" width="150" height="110" rx="8" fill="#F1F5F9" stroke="#CBD5E1" />
+        <text x="285" y="40" text-anchor="middle" font-size="10" fill="#94A3B8" letter-spacing="1">2D IMAGE</text>
+        <rect x="225" y="50" width="120" height="65" rx="4" fill="#E2E8F0" />
+        <rect x="235" y="58" width="22" height="38" rx="2" fill="#94A3B8" opacity="0.6" />
+        <rect x="275" y="68" width="40" height="16" rx="3" fill="#64748B" opacity="0.5" />
+        <circle cx="300" cy="96" r="4" fill="#64748B" opacity="0.4" />
+        <text x="285" y="140" text-anchor="middle" font-size="9" fill="#64748B">X, Y만 존재</text>
+
+        <!-- Arrow: AI 모델 -->
+        <line x1="367" y1="75" x2="407" y2="75" stroke="#F37321" stroke-width="1.8" marker-end="url(#m-arr)" />
+        <text x="387" y="66" text-anchor="middle" font-size="8" fill="#F37321" font-weight="600">AI Model</text>
+
+        <!-- Step 3: Depth Map -->
+        <rect x="415" y="20" width="150" height="110" rx="8" fill="#F1F5F9" stroke="#CBD5E1" />
+        <text x="490" y="40" text-anchor="middle" font-size="10" fill="#94A3B8" letter-spacing="1">DEPTH MAP</text>
+        <rect x="430" y="50" width="120" height="65" rx="4" fill="url(#dGrad)" />
+        <text x="490" y="87" text-anchor="middle" font-size="10" fill="#fff" font-weight="600">깊이 정보</text>
+        <text x="490" y="140" text-anchor="middle" font-size="9" fill="#64748B">픽셀별 Z값 복원</text>
+
+        <!-- Arrow -->
+        <line x1="572" y1="75" x2="612" y2="75" stroke="#F37321" stroke-width="1.8" marker-end="url(#m-arr)" />
+
+        <!-- Step 4: 3D 복원 -->
+        <rect x="620" y="20" width="130" height="110" rx="8" fill="#FFF2E8" stroke="#F37321" stroke-width="1.3" />
+        <text x="685" y="40" text-anchor="middle" font-size="10" fill="#F37321" letter-spacing="1">3D SCENE</text>
+        <!-- point cloud -->
+        <circle cx="645" cy="60" r="3" fill="#F37321" opacity="0.9" />
+        <circle cx="660" cy="55" r="2.5" fill="#F37321" opacity="0.7" />
+        <circle cx="675" cy="65" r="3.5" fill="#F37321" opacity="0.85" />
+        <circle cx="695" cy="58" r="2" fill="#F37321" opacity="0.6" />
+        <circle cx="710" cy="68" r="2.5" fill="#F37321" opacity="0.75" />
+        <circle cx="650" cy="78" r="2" fill="#F37321" opacity="0.5" />
+        <circle cx="670" cy="85" r="3" fill="#F37321" opacity="0.8" />
+        <circle cx="690" cy="80" r="2.5" fill="#F37321" opacity="0.65" />
+        <circle cx="720" cy="75" r="2" fill="#F37321" opacity="0.4" />
+        <circle cx="640" cy="92" r="2.5" fill="#F37321" opacity="0.6" />
+        <circle cx="705" cy="90" r="3" fill="#F37321" opacity="0.7" />
+        <circle cx="730" cy="85" r="1.5" fill="#F37321" opacity="0.35" />
+        <text x="685" y="118" text-anchor="middle" font-size="9" fill="#9A3412" font-weight="600">3D Point Cloud</text>
+        <text x="685" y="140" text-anchor="middle" font-size="9" fill="#64748B">X, Y, Z 복원 완료</text>
+
+        <!-- 하단 라벨 -->
+        <rect x="5" y="160" width="745" height="32" rx="6" fill="#F8FAFC" stroke="#E5E7EB" />
+        <text x="80" y="180" text-anchor="middle" font-size="9" fill="#334155" font-weight="600">Depth Estimation</text>
+        <text x="240" y="180" text-anchor="middle" font-size="9" fill="#334155" font-weight="600">Stereo Vision</text>
+        <text x="390" y="180" text-anchor="middle" font-size="9" fill="#334155" font-weight="600">NeRF</text>
+        <text x="520" y="180" text-anchor="middle" font-size="9" fill="#334155" font-weight="600">3D Gaussian Splatting</text>
+        <text x="680" y="180" text-anchor="middle" font-size="9" fill="#334155" font-weight="600">SfM / MVS</text>
+      </svg>
+    </div>
+
+    <!-- 본문 설명 -->
+    <p class="text-sm text-sub leading-relaxed mb-5">
+      <strong class="text-ink">3D Vision</strong>은 2D 이미지나 영상으로부터
+      <strong class="text-ink">3차원 공간의 구조, 깊이, 형태를 복원하고 이해</strong>하는 컴퓨터 비전 분야입니다.
+      카메라로 촬영하면 3D 세계의 한 차원(깊이, Z)이 소실되는데,
+      이 잃어버린 정보를 AI 모델로 되살리는 것이 핵심 과제입니다.
+    </p>
+
+    <p class="text-[11px] font-semibold text-gray-500 mb-2 tracking-wide">주요 기술</p>
+    <ul class="text-sm text-sub leading-relaxed space-y-1 mb-5">
+      <li>· <strong class="text-ink">Depth Estimation</strong> — 단일 또는 다중 이미지에서 픽셀별 깊이값을 예측하는 기술. Monocular / Stereo 방식으로 나뉨</li>
+      <li>· <strong class="text-ink">3D Reconstruction</strong> — 여러 시점의 이미지로 3D 모델을 복원 (SfM, MVS 등의 기하학 기반 접근)</li>
+      <li>· <strong class="text-ink">NeRF / 3D Gaussian Splatting</strong> — 소수의 이미지로 임의 시점의 사실적 렌더링을 생성하는 최신 Neural Rendering 기술</li>
+      <li>· <strong class="text-ink">BEV Perception</strong> — 자율주행에서 다중 카메라 영상을 Bird's-Eye View로 변환하여 주변 환경을 3D로 인식</li>
+    </ul>
+
+    <p class="text-[11px] font-semibold text-gray-500 mb-2 tracking-wide">적용 분야</p>
+    <ul class="text-sm text-sub leading-relaxed space-y-1 mb-5">
+      <li>· <strong class="text-ink">자율주행</strong> — 카메라 기반 주변 환경 3D 인식, 장애물 거리 추정 (Stradvision 업무와 직결)</li>
+      <li>· <strong class="text-ink">로봇 / AR / VR</strong> — 공간 매핑, 물체 파지(grasping), 혼합현실 콘텐츠 배치</li>
+      <li>· <strong class="text-ink">의료 / 산업</strong> — CT·MRI 3D 재구성, 디지털 트윈, 건축 측량</li>
+    </ul>
+
+    <div class="flex gap-2 flex-wrap">
+      <span class="text-[10px] px-2.5 py-1 rounded-full font-semibold" style="background:#FFF2E8;color:#F37321">Depth Estimation</span>
+      <span class="text-[10px] px-2.5 py-1 rounded-full font-semibold" style="background:#FFF2E8;color:#F37321">NeRF</span>
+      <span class="text-[10px] px-2.5 py-1 rounded-full font-semibold" style="background:#FFF2E8;color:#F37321">3DGS</span>
+      <span class="text-[10px] px-2.5 py-1 rounded-full font-semibold" style="background:#FFF2E8;color:#F37321">BEV</span>
+      <span class="text-[10px] px-2.5 py-1 rounded-full font-semibold" style="background:#FFF2E8;color:#F37321">SfM / MVS</span>
+      <span class="text-[10px] px-2.5 py-1 rounded-full font-semibold" style="background:#FFF2E8;color:#F37321">Point Cloud</span>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Spatial VLM -->
+<div class="modal-overlay" id="modal-spatialvlm" onclick="closeModal(event, 'spatialvlm')">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <p class="eyebrow mb-1">Core Interest</p>
+        <h3 class="text-xl font-bold">Spatial VLM</h3>
+      </div>
+      <button onclick="closeModal(event, 'spatialvlm')" class="text-gray-400 hover:text-gray-600 text-2xl leading-none">&times;</button>
+    </div>
+
+    <!-- 개념 다이어그램 -->
+    <div class="bg-gray-50 border border-gray-200 rounded-xl p-5 mb-6">
+      <p class="text-[10px] text-gray-400 tracking-wider mb-3">CORE CONCEPT</p>
+      <svg viewBox="0 0 760 240" class="w-full h-auto">
+        <defs>
+          <marker id="m-arr2" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L7,3 z" fill="#94A3B8" />
+          </marker>
+        </defs>
+
+        <!-- Input: Image + Question -->
+        <rect x="5" y="10" width="180" height="160" rx="8" fill="#F8FAFC" stroke="#E5E7EB" />
+        <text x="95" y="30" text-anchor="middle" font-size="10" fill="#94A3B8" letter-spacing="1">INPUT</text>
+
+        <!-- 이미지 -->
+        <rect x="15" y="40" width="160" height="70" rx="5" fill="#E2E8F0" />
+        <rect x="25" y="50" width="28" height="40" rx="3" fill="#94A3B8" opacity="0.6" />
+        <text x="39" y="74" text-anchor="middle" font-size="8" fill="#fff" font-weight="600">의자</text>
+        <rect x="80" y="48" width="20" height="30" rx="3" fill="#64748B" opacity="0.5" />
+        <text x="90" y="66" text-anchor="middle" font-size="7" fill="#fff">책상</text>
+        <rect x="120" y="55" width="35" height="25" rx="3" fill="#475569" opacity="0.4" />
+        <text x="137" y="70" text-anchor="middle" font-size="7" fill="#fff">소파</text>
+        <!-- 거리선 -->
+        <line x1="39" y1="92" x2="90" y2="92" stroke="#F37321" stroke-width="1.2" stroke-dasharray="3 3" />
+        <text x="65" y="104" text-anchor="middle" font-size="7" fill="#F37321" font-weight="600">?m</text>
+
+        <!-- 질문 -->
+        <rect x="15" y="118" width="160" height="38" rx="6" fill="#FFF2E8" stroke="#FBD0B0" />
+        <text x="95" y="135" text-anchor="middle" font-size="10" fill="#9A3412" font-weight="600">"의자에서 책상까지 거리는?"</text>
+        <text x="95" y="150" text-anchor="middle" font-size="8" fill="#94A3B8">자연어 질문</text>
+
+        <!-- Arrow → Model -->
+        <line x1="192" y1="90" x2="242" y2="90" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#m-arr2)" />
+
+        <!-- Model -->
+        <rect x="250" y="10" width="200" height="160" rx="10" fill="#fff" stroke="#F37321" stroke-width="1.8" />
+        <text x="350" y="32" text-anchor="middle" font-size="11" fill="#F37321" font-weight="700" letter-spacing="1.5">SPATIAL VLM</text>
+        <rect x="268" y="44" width="164" height="26" rx="5" fill="#F1F5F9" stroke="#CBD5E1" />
+        <text x="350" y="61" text-anchor="middle" font-size="10" fill="#64748B">Vision Encoder</text>
+        <rect x="268" y="78" width="164" height="26" rx="5" fill="#FFF2E8" stroke="#FBD0B0" />
+        <text x="350" y="95" text-anchor="middle" font-size="10" fill="#9A3412" font-weight="600">3D Spatial Reasoning</text>
+        <rect x="268" y="112" width="164" height="26" rx="5" fill="#F1F5F9" stroke="#CBD5E1" />
+        <text x="350" y="129" text-anchor="middle" font-size="10" fill="#64748B">Large Language Model</text>
+        <circle cx="350" cy="155" r="4" fill="#F37321" class="node-pulse" />
+
+        <!-- Arrow → Output -->
+        <line x1="457" y1="90" x2="507" y2="90" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#m-arr2)" />
+
+        <!-- Output -->
+        <rect x="515" y="10" width="235" height="160" rx="8" fill="#F8FAFC" stroke="#E5E7EB" />
+        <text x="632" y="30" text-anchor="middle" font-size="10" fill="#94A3B8" letter-spacing="1">OUTPUT</text>
+        <rect x="528" y="42" width="210" height="28" rx="5" fill="#fff" stroke="#E5E7EB" />
+        <text x="633" y="60" text-anchor="middle" font-size="10" fill="#334155" font-weight="600">"약 1.2m 떨어져 있습니다"</text>
+        <rect x="528" y="78" width="210" height="28" rx="5" fill="#fff" stroke="#E5E7EB" />
+        <text x="633" y="96" text-anchor="middle" font-size="10" fill="#334155" font-weight="600">"의자는 책상의 왼쪽 앞에 위치"</text>
+        <rect x="528" y="114" width="210" height="28" rx="5" fill="#fff" stroke="#E5E7EB" />
+        <text x="633" y="132" text-anchor="middle" font-size="10" fill="#334155" font-weight="600">"의자 크기: 약 45cm × 45cm"</text>
+
+        <!-- 하단 비교 -->
+        <rect x="5" y="184" width="365" height="46" rx="6" fill="#F8FAFC" stroke="#E5E7EB" />
+        <text x="16" y="201" font-size="9" fill="#94A3B8" font-weight="600" letter-spacing="1">기존 VLM</text>
+        <text x="16" y="220" font-size="10" fill="#64748B">"이것은 <tspan font-weight="600" fill="#334155">의자</tspan>입니다" → 의미 인식(<tspan font-weight="700" fill="#94A3B8">What</tspan>)에 집중</text>
+
+        <rect x="385" y="184" width="365" height="46" rx="6" fill="#FFF2E8" stroke="#FBD0B0" />
+        <text x="396" y="201" font-size="9" fill="#F37321" font-weight="600" letter-spacing="1">SPATIAL VLM</text>
+        <text x="396" y="220" font-size="10" fill="#64748B">"의자, <tspan font-weight="600" fill="#9A3412">1.2m 앞 왼쪽</tspan>" → 공간 관계(<tspan font-weight="700" fill="#F37321">Where</tspan>)까지</text>
+      </svg>
+    </div>
+
+    <!-- 본문 설명 -->
+    <p class="text-sm text-sub leading-relaxed mb-5">
+      <strong class="text-ink">Spatial VLM</strong>은 이미지를 보고 자연어로 소통할 수 있는
+      VLM(Vision-Language Model)에 <strong class="text-ink">3D 공간 추론 능력</strong>을 결합한 모델입니다.
+      기존 VLM이 <strong class="text-ink">"무엇이 있는가(What)"</strong>에 집중했다면,
+      Spatial VLM은 <strong class="text-ink">"어디에, 얼마나 떨어져, 어떤 크기로(Where)"</strong>까지
+      이해하고 답할 수 있습니다. 3D Vision의 공간 이해 능력과 LLM의 언어 추론 능력이 만나는 접점에 위치합니다.
+    </p>
+
+    <p class="text-[11px] font-semibold text-gray-500 mb-2 tracking-wide">기존 VLM과의 차이</p>
+    <ul class="text-sm text-sub leading-relaxed space-y-1 mb-5">
+      <li>· <strong class="text-ink">기존 VLM</strong> — "사진에 고양이가 있다" (의미 인식 중심, 공간 정보 없음)</li>
+      <li>· <strong class="text-ink">Spatial VLM</strong> — "고양이는 소파 위, 카메라에서 약 2m 거리에 있다" (물리적 공간 관계까지 추론)</li>
+    </ul>
+
+    <p class="text-[11px] font-semibold text-gray-500 mb-2 tracking-wide">핵심 능력</p>
+    <ul class="text-sm text-sub leading-relaxed space-y-1 mb-5">
+      <li>· <strong class="text-ink">거리 추정</strong> — 이미지 속 객체까지의 실제 물리적 거리를 자연어로 답변</li>
+      <li>· <strong class="text-ink">공간 관계 추론</strong> — 객체 간 상대 위치, 크기 비교, 방향 판단</li>
+      <li>· <strong class="text-ink">3D 기반 질의응답</strong> — "이 물건을 집으려면 로봇 팔을 어디로 보내야 해?" 같은 복잡한 공간 질문에 응답</li>
+    </ul>
+
+    <p class="text-[11px] font-semibold text-gray-500 mb-2 tracking-wide">적용 분야</p>
+    <ul class="text-sm text-sub leading-relaxed space-y-1 mb-5">
+      <li>· <strong class="text-ink">로봇 조작(Manipulation)</strong> — 자연어 명령으로 물체를 정확한 위치에서 파지하고 배치</li>
+      <li>· <strong class="text-ink">자율 내비게이션</strong> — "왼쪽 문으로 3m 이동해" 같은 공간 기반 명령 이해</li>
+      <li>· <strong class="text-ink">AR / 혼합현실</strong> — 실제 공간에 가상 객체를 물리적으로 올바른 위치에 배치</li>
+      <li>· <strong class="text-ink">군사 / 감시</strong> — 영상 속 표적의 위치·거리를 자연어로 보고 (한화시스템 업무와 연결 가능)</li>
+    </ul>
+
+    <div class="flex gap-2 flex-wrap">
+      <span class="text-[10px] px-2.5 py-1 rounded-full font-semibold" style="background:#FFF2E8;color:#F37321">Vision-Language Model</span>
+      <span class="text-[10px] px-2.5 py-1 rounded-full font-semibold" style="background:#FFF2E8;color:#F37321">Spatial Reasoning</span>
+      <span class="text-[10px] px-2.5 py-1 rounded-full font-semibold" style="background:#FFF2E8;color:#F37321">3D + LLM</span>
+      <span class="text-[10px] px-2.5 py-1 rounded-full font-semibold" style="background:#FFF2E8;color:#F37321">Embodied AI</span>
+      <span class="text-[10px] px-2.5 py-1 rounded-full font-semibold" style="background:#FFF2E8;color:#F37321">Robot Manipulation</span>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
