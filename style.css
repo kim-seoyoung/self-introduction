@@ -23,8 +23,8 @@ h1, h2, h3, p { margin: 0; }
     --text: #2f2f2f;
     --text-soft: #6b6b6b;
     --text-mute: #9a9a9a;
-    --accent: #ff6b35;
-    --accent-soft: #fff1ea;
+    --accent: #c9aeef;
+    --accent-soft: #f5eefd;
     --radius: 10px;
     --radius-sm: 6px;
     --max: 860px;
